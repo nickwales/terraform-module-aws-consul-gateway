@@ -21,6 +21,11 @@ variable "consul_license" {}
 variable "consul_version" {
   default = "1.18.1"
 }
+
+variable "envoy_version" {
+  description = "Set the envoy version, compatability matrix: https://developer.hashicorp.com/consul/docs/connect/proxies/envoy#envoy-and-consul-client-agent"
+  default = "1.28.5"
+}
 variable "consul_binary" {
   description = "Allows upgrading to Consul Enterprise"
   default     = "consul"
