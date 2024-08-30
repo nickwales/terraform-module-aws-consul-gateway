@@ -40,6 +40,7 @@ resource "aws_launch_template" "consul_gateway" {
   user_data = base64encode(templatefile("${path.module}/templates/userdata.sh.tftpl", { 
     name                  = var.name,
     datacenter            = var.datacenter, 
+    envoy_version         = var.envoy_version,
     consul_version        = var.consul_version,
     consul_token          = var.consul_token,
     consul_encryption_key = var.consul_encryption_key,
