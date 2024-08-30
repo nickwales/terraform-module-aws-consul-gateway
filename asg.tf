@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "consul_gateway" {
-  name                      = "consul-gateway-${var.datacenter}"
+  name                      = "consul-gateway-${var.name}-${var.datacenter}"
   max_size                  = 3
   min_size                  = 1
   health_check_grace_period = 300
@@ -10,11 +10,11 @@ resource "aws_autoscaling_group" "consul_gateway" {
   }
   
   target_group_arns         = var.target_groups
-  vpc_zone_identifier       = var.private_subnets
+  vpc_zone_identifier       = var.public_subnets
 
   tag {
     key                 = "Name"
-    value               = "consul-gateway-${var.datacenter}"
+    value               = "consul-gateway-${var.name}-${var.datacenter}"
     propagate_at_launch = true
   }
 }
@@ -26,13 +26,13 @@ resource "aws_launch_template" "consul_gateway" {
   iam_instance_profile {
     name = aws_iam_instance_profile.consul_gateway.name
   }
-  name = "consul-gateway-${var.datacenter}"
+  name = "consul-gateway-${var.name}-${var.datacenter}"
   tag_specifications {
     resource_type = "instance"
 
     tags = {
-      Name = "consul-gateway-${var.datacenter}",
-      role = "consul-gateway-${var.datacenter}",
+      Name = "consul-gateway-${var.name}-${var.datacenter}",
+      role = "consul-gateway-${var.name}-${var.datacenter}",
     }
   }  
   update_default_version = true
