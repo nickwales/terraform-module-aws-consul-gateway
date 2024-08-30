@@ -10,7 +10,7 @@ resource "aws_autoscaling_group" "consul_gateway" {
   }
   
   target_group_arns         = var.target_groups
-  vpc_zone_identifier       = var.public_subnets
+  vpc_zone_identifier       = var.private_subnets
 
   tag {
     key                 = "Name"
