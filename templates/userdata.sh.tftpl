@@ -109,8 +109,12 @@ cat <<EOT > /etc/systemd/system/mesh-gateway.service
 [Unit]
 Description=Consul Mesh Gateway
 After=syslog.target network.target
+StartLimitIntervalSec=0
 
 [Service]
+Type=simple
+Restart=always
+RestartSec=5
 Environment=CONSUL_HTTP_TOKEN=${consul_token}
 ExecStart=/usr/bin/consul connect envoy -mesh-gateway \
   -register \
@@ -129,8 +133,12 @@ cat <<EOT >> /etc/systemd/system/ingress-gateway.service
 [Unit]
 Description=Consul Ingress Gateway
 After=syslog.target network.target
+StartLimitIntervalSec=0
 
 [Service]
+Type=simple
+Restart=always
+RestartSec=5
 Environment=CONSUL_HTTP_TOKEN=${consul_token}
 ExecStart=/usr/bin/consul connect envoy -gateway \
   ingress \
@@ -138,7 +146,7 @@ ExecStart=/usr/bin/consul connect envoy -gateway \
   -admin-bind 127.0.0.1:19001 \
   $${tenancy_command}
 ExecStop=/bin/sleep 5
-Restart=always
+
 
 [Install]
 WantedBy=multi-user.target
@@ -149,8 +157,12 @@ cat <<EOT >> /etc/systemd/system/api-gateway.service
 [Unit]
 Description=Consul API Gateway
 After=syslog.target network.target
+StartLimitIntervalSec=0
 
 [Service]
+Type=simple
+Restart=always
+RestartSec=5
 Environment=CONSUL_HTTP_TOKEN=${consul_token}
 ExecStart=/usr/bin/consul connect envoy \
   -gateway api \
@@ -158,7 +170,31 @@ ExecStart=/usr/bin/consul connect envoy \
   -admin-bind 127.0.0.1:19002 \
   $${tenancy_command}
 ExecStop=/bin/sleep 5
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+# Terminating Gateway
+cat <<EOT >> /etc/systemd/system/terminating-gateway.service
+[Unit]
+Description=Consul API Gateway
+After=syslog.target network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
 Restart=always
+RestartSec=5
+
+Environment=CONSUL_HTTP_TOKEN=${consul_token}
+ExecStart=/usr/bin/consul connect envoy \
+  -gateway terminating \
+  -register \
+  -admin-bind 127.0.0.1:19003 \
+  $${tenancy_command}
+ExecStop=/bin/sleep 5
+
 
 [Install]
 WantedBy=multi-user.target
@@ -169,3 +205,4 @@ systemctl daemon-reload
 systemctl enable mesh-gateway --now
 systemctl enable ingress-gateway --now
 systemctl enable api-gateway --now
+systemctl enable terminating-gateway --now
