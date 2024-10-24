@@ -38,6 +38,14 @@ resource "aws_iam_role_policy" "consul_gateway" {
             Effect = "Allow"
             Resource = "*"
           },
+        {
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:lambda:us-east-1:*:*",
+            "Sid": "Invoke"
+        }          
         ]
     })
 }
