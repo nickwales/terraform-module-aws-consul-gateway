@@ -19,7 +19,7 @@ variable "consul_token" {
 }
 variable "consul_license" {}
 variable "consul_version" {
-  default = "1.18.1"
+  default = "1.20.0"
 }
 
 variable "envoy_version" {
