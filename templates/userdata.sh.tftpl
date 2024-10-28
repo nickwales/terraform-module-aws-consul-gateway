@@ -192,6 +192,7 @@ ExecStart=/usr/bin/consul connect envoy \
   -gateway terminating \
   -register \
   -admin-bind 127.0.0.1:19003 \
+  -address $${INSTANCE_IP}:8444 \
   $${tenancy_command}
 ExecStop=/bin/sleep 5
 
