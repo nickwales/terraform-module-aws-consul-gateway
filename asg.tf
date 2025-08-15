@@ -46,7 +46,7 @@ resource "aws_launch_template" "consul_gateway" {
     consul_encryption_key = var.consul_encryption_key,
     consul_license        = var.consul_license,
     consul_server_count   = var.consul_gateway_count,
-    consul_agent_ca       = var.consul_agent_ca,
+    consul_ca_file        = var.consul_ca_file,
     consul_binary         = var.consul_binary,
     consul_partition      = var.consul_partition,
     consul_namespace      = var.consul_namespace,    
